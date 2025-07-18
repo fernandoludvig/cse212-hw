@@ -24,7 +24,24 @@
 
     private static int CountDuplicates(int[] data)
     {
-        // Add code here.
-        return 0;
+        // Conjunto para armazenar os valores únicos já vistos
+        var seen = new HashSet<int>();
+        
+        // Contador de duplicatas
+        int duplicateCount = 0;
+
+        // Para cada número no array
+        foreach (int number in data)
+        {
+            // Tenta adicionar ao conjunto
+            // Se não conseguir (porque já existe), é duplicado
+            if (!seen.Add(number))
+            {
+                duplicateCount++; // Conta a duplicata
+            }
+        }
+
+        // Retorna o total de duplicatas encontradas
+        return duplicateCount;
     }
 }

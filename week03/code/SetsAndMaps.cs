@@ -21,9 +21,37 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+
+        // Cria um HashSet para armazenar palavras já vistas, garantindo busca rápida (O(1))
+    var wordSet = new HashSet<string>();
+
+    // Lista para armazenar os pares encontrados no formato "xx & yy"
+    var result = new List<string>();
+
+    // Percorre cada palavra da lista de entrada
+    foreach (var word in words)
+    {
+        // Se os dois caracteres forem iguais (ex: "aa"), ignoramos, pois não pode formar par
+        if (word[0] == word[1]) continue;
+
+        // Cria a palavra reversa invertendo os dois caracteres (ex: "am" -> "ma")
+        var reversed = new string(new[] { word[1], word[0] });
+
+        // Verifica se a palavra reversa já foi vista antes
+        if (wordSet.Contains(reversed))
+        {
+            // Se sim, então encontramos um par simétrico e adicionamos ao resultado
+            result.Add($"{reversed} & {word}");
+        }
+        else
+        {
+            // Se não, adicionamos a palavra ao conjunto para verificar mais tarde
+            wordSet.Add(word);
+        }
     }
+
+    return result.ToArray();
+}
 
     /// <summary>
     /// Read a census file and summarize the degrees (education)
@@ -42,11 +70,22 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+             // Verifica se há pelo menos 4 colunas
+        if (fields.Length >= 4)
+        {
+            string degree = fields[3].Trim(); // Pega o grau e remove espaços
+
+            // Se já existe, incrementa
+            if (degrees.ContainsKey(degree))
+                degrees[degree]++;
+            else
+                degrees[degree] = 1;
         }
+    }
+       
 
         return degrees;
-    }
+}
 
     /// <summary>
     /// Determine if 'word1' and 'word2' are anagrams.  An anagram
@@ -65,10 +104,38 @@ public static class SetsAndMaps
     /// using the [] notation.
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
+{
+    // Remove espaços e ignora maiúsculas
+    word1 = word1.Replace(" ", "").ToLower();
+    word2 = word2.Replace(" ", "").ToLower();
+
+    // Se os tamanhos forem diferentes, não pode ser anagrama
+    if (word1.Length != word2.Length) return false;
+
+    // Conta letras de word1
+    var count1 = new Dictionary<char, int>();
+    foreach (char c in word1)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        if (count1.ContainsKey(c))
+            count1[c]++;
+        else
+            count1[c] = 1;
     }
+
+    // Conta letras de word2
+    var count2 = new Dictionary<char, int>();
+    foreach (char c in word2)
+    {
+        if (count2.ContainsKey(c))
+            count2[c]++;
+        else
+            count2[c] = 1;
+    }
+
+    // Compara os dois dicionários
+    return count1.Count == count2.Count && !count1.Except(count2).Any();
+}
+
 
     /// <summary>
     /// This function will read JSON (Javascript Object Notation) data from the 
