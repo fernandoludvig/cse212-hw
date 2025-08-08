@@ -11,7 +11,9 @@ public class Node
 
     public void Insert(int value)
     {
-        // TODO Start Problem 1
+        // Problem 1: Prevent duplicates
+        if (value == Data)
+            return; // Duplicate found, do nothing
 
         if (value < Data)
         {
@@ -21,7 +23,7 @@ public class Node
             else
                 Left.Insert(value);
         }
-        else
+        else // value > Data
         {
             // Insert to the right
             if (Right is null)
@@ -33,13 +35,21 @@ public class Node
 
     public bool Contains(int value)
     {
-        // TODO Start Problem 2
-        return false;
+        // Problem 2: Recursive search
+        if (value == Data)
+            return true;
+        else if (value < Data)
+            return Left?.Contains(value) ?? false;
+        else // value > Data
+            return Right?.Contains(value) ?? false;
     }
 
     public int GetHeight()
     {
-        // TODO Start Problem 4
-        return 0; // Replace this line with the correct return statement(s)
+        // Problem 4: Recursive height calculation
+        int leftHeight = Left?.GetHeight() ?? 0;
+        int rightHeight = Right?.GetHeight() ?? 0;
+
+        return 1 + Math.Max(leftHeight, rightHeight);
     }
 }
